@@ -98,6 +98,10 @@ def call_api(observables):
 def deliberate_observables():
     observables = get_observables()
     observables = group_observables(observables)
+
+    if not observables:
+        return jsonify_data({})
+
     result = call_api(observables)
 
     return jsonify_data(result)
