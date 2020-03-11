@@ -14,4 +14,4 @@ def health():
         return jsonify_data({'status': 'ok'})
 
     error = response.json()['error']
-    return jsonify_errors({'errors': [error]})
+    return jsonify_errors(error)
