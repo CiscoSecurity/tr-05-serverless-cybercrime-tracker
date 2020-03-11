@@ -20,5 +20,5 @@ def valid_json():
 def test_enrich_call_success(route, client, valid_json):
     response = client.post(route, json=valid_json)
     assert response.status_code == HTTPStatus.OK
-    assert response.get_json()\
-               ['data']['verdicts']['docs'][0]['disposition'] == 2
+    assert \
+        response.get_json()['data']['verdicts']['docs'][0]['disposition'] == 2
