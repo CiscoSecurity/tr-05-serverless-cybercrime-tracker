@@ -8,7 +8,7 @@
         "manage_roles": false,
         "profile_name": "serverless",
         "project_name": "tr-cybercrime-tracker-relay",
-        "runtime": "python3.6",
+        "runtime": "python3.7",
         "s3_bucket": "zappa-tr-cybercrime-tracker-relay"
     }
 }
