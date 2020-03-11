@@ -14,9 +14,11 @@ def route(request):
 
 @fixture(scope='module')
 def valid_json():
-    return [{'type': 'url', 'value': 'cisco.com'}]
+    return [{'type': 'ip', 'value': '104.24.123.62'}]
 
 
 def test_enrich_call_success(route, client, valid_json):
     response = client.post(route, json=valid_json)
     assert response.status_code == HTTPStatus.OK
+    assert response.get_json()\
+               ['data']['verdicts']['docs'][0]['disposition'] == 2

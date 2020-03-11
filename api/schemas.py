@@ -41,6 +41,15 @@ OBSERVABLE_TYPE_CHOICES = (
     'sha256',
     'url',
     'user',
+    "certificate_common_name",
+    "certificate_issuer",
+    "certificate_serial",
+    "orbital_node_id",
+    "process_name",
+    "registry_key",
+    "registry_name",
+    "registry_path",
+    "user_agent"
 )
 
 

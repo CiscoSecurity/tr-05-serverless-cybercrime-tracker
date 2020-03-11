@@ -6,8 +6,6 @@
   "record": "relay-module.module/RelayModule+Custom+CS",
   "config": {
     "url": "${URL}",
-    "auth-type": "authorization-header",
-    "authorization-header": "Bearer ${JWT}",
     "supported-apis": [
       "health",
       "observe/observables",
