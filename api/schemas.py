@@ -62,22 +62,3 @@ class ObservableSchema(Schema):
         validate=validate_string,
         required=True,
     )
-
-
-class ActionFormParamsSchema(Schema):
-    action_id = fields.String(
-        data_key='action-id',
-        validate=validate_string,
-        required=True,
-    )
-    observable_type = fields.String(
-        validate=partial(validate_string, choices=OBSERVABLE_TYPE_CHOICES),
-        required=True,
-    )
-    observable_value = fields.String(
-        validate=validate_string,
-        required=True,
-    )
-
-    class Meta:
-        unknown = INCLUDE
