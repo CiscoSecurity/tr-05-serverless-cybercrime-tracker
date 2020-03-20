@@ -46,13 +46,7 @@ def group_observables(relay_input):
     return result
 
 
-def format_docs(docs):
-    return {'count': len(docs), 'docs': docs}
-
-
-def call_api(observables):
-    result = {}
-    verdicts = []
+def build_input_api(observables):
 
     for observable in observables:
         o_value = observable['value']
@@ -61,20 +55,53 @@ def call_api(observables):
         if current_app.config['CCT_OBSERVABLE_TYPES'][o_type].get('sep'):
             o_value = o_value.split(
                 current_app.config['CCT_OBSERVABLE_TYPES'][o_type]['sep'])[-1]
+            observable['value'] = o_value
+    return observables
 
-        response = requests.get(
-            current_app.config['API_URL']
-            + current_app.config['API_PATH'].format(observable=o_value)
-        )
-        if not response.ok:
-            return jsonify_errors(response.json()['error'])
 
-        def get_disposition():
-            res = response.json()['message']
-            if res.startswith('Malicious'):
-                return current_app.config['DISPOSITIONS']['Malicious']
+def format_docs(docs):
+    return {'count': len(docs), 'docs': docs}
 
-        disposition = get_disposition()
+
+def call_api(value):
+    response = requests.get(
+        f"{current_app.config['API_URL']}/"
+        f"{current_app.config['API_PATH'].format(observable=value)}"
+    )
+    if not response.ok:
+        return jsonify_errors(response.json()['error'])
+
+    return response.json()
+
+
+def get_disposition(res):
+    if res.startswith('Malicious'):
+        return current_app.config['DISPOSITIONS']['Malicious']
+
+
+@enrich_api.route('/deliberate/observables', methods=['POST'])
+def deliberate_observables():
+    observables, error = get_observables()
+    if error:
+        return jsonify_errors(error)
+
+    observables = group_observables(observables)
+
+    if not observables:
+        return jsonify_data({})
+
+    data = {}
+    verdicts = []
+
+    observables = build_input_api(observables)
+
+    for observable in observables:
+        o_value = observable['value']
+        o_type = observable['type'].lower()
+
+        response = call_api(o_value)
+
+        disposition = get_disposition(response['message'])
         if not disposition:
             continue
 
@@ -89,31 +116,54 @@ def call_api(observables):
             get_verdict(o_value, o_type, disposition, valid_time))
 
     if verdicts:
-        result['verdicts'] = format_docs(verdicts)
+        data['verdicts'] = format_docs(verdicts)
 
-    return result
+    return jsonify_data(data)
 
 
-@enrich_api.route('/deliberate/observables', methods=['POST'])
-def deliberate_observables():
-    observables = get_observables()
+@enrich_api.route('/observe/observables', methods=['POST'])
+def observe_observables():
+    observables, error = get_observables()
+    if error:
+        return jsonify_errors(error)
+
     observables = group_observables(observables)
 
     if not observables:
         return jsonify_data({})
 
-    result = call_api(observables)
+    data = {}
+    verdicts = []
 
-    return jsonify_data(result)
+    observables = build_input_api(observables)
 
+    for observable in observables:
+        o_value = observable['value']
+        o_type = observable['type'].lower()
 
-@enrich_api.route('/observe/observables', methods=['POST'])
-def observe_observables():
-    _ = get_observables()
-    return jsonify_data({})
+        response = call_api(o_value)
+
+        disposition = get_disposition(response['message'])
+        if not disposition:
+            continue
+
+        start_time = datetime.utcnow()
+        end_time = start_time + timedelta(weeks=1)
+        valid_time = {
+            'start_time': start_time.isoformat() + 'Z',
+            'end_time': end_time.isoformat() + 'Z',
+        }
+
+        verdicts.append(
+            get_verdict(o_value, o_type, disposition, valid_time))
+
+    if verdicts:
+        data['verdicts'] = format_docs(verdicts)
+
+    return jsonify_data(data)
 
 
 @enrich_api.route('/refer/observables', methods=['POST'])
 def refer_observables():
-    _ = get_observables()
+    # Not supported or implemented
     return jsonify_data([])
