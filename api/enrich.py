@@ -27,7 +27,7 @@ def get_judgement(observable_value, observable_type,
         'disposition': disposition,
         'disposition_name': 'Malicious',
         'type': 'judgement',
-        'schema_version': '1.0.14',
+        'schema_version': '1.0.16',
         'source': 'Cybercrime Tracker',
         'confidence': 'Low',
         'priority': 90,
@@ -85,7 +85,7 @@ def format_docs(docs):
 
 def call_api(value):
     response = requests.get(
-        f"{current_app.config['API_URL']}/"
+        f"{current_app.config['API_URL']}"
         f"{current_app.config['API_PATH'].format(observable=value)}"
     )
     if not response.ok:
@@ -178,7 +178,7 @@ def observe_observables():
         verdicts.append(
             get_verdict(o_value, o_type, disposition, valid_time))
 
-        verdicts.append(
+        judgements.append(
             get_judgement(o_value, o_type, disposition, valid_time))
 
     if verdicts:

@@ -1,14 +1,8 @@
-from functools import partial
-
 from flask import Blueprint
 
-from api.schemas import ObservableSchema
-from api.utils import get_json, jsonify_data
+from api.utils import jsonify_data
 
 respond_api = Blueprint('respond', __name__)
-
-
-get_observables = partial(get_json, schema=ObservableSchema(many=True))
 
 
 @respond_api.route('/respond/observables', methods=['POST'])
