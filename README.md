@@ -2,8 +2,7 @@
 
 # CyberCrime Tracker Relay API
 
-A simple an example using Relay API
-[CyberCrime Tracker API](http://cybercrime-tracker.net/index.php?search=$OBSERVABLE)
+[CyberCrime Tracker API](http://cybercrime-tracker.net)
 
 The API itself is just a simple Flask (WSGI) application which can be easily
 packaged and deployed as an AWS Lambda Function working behind an AWS API
