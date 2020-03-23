@@ -14,12 +14,13 @@ class Config:
 
     # Supported types of verdict
     DISPOSITIONS = {
-        'Clean': 1,
-        'Malicious': 2,
-        'Suspicious': 3,
-        'Common': 4,
-        'Unknown': 5
+        'clean': (1, 'Clean'),
+        'malicious': (2, 'Malicious'),
+        'suspicious': (3, 'Suspicious'),
+        'common': (4, 'Common'),
+        'unknown': (5, 'Unknown')
     }
+
 
     # Supported types with rules
     CCT_OBSERVABLE_TYPES = {

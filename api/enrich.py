@@ -24,8 +24,8 @@ def get_judgement(observable_value, observable_type,
     return {
         'id': f'transient:{uuid4()}',
         'observable': {'value': observable_value, 'type': observable_type},
-        'disposition': disposition,
-        'disposition_name': 'Malicious',
+        'disposition': disposition[0],
+        'disposition_name': disposition[1],
         'type': 'judgement',
         'schema_version': '1.0.16',
         'source': 'Cybercrime Tracker',
@@ -43,7 +43,7 @@ def get_verdict(observable_value, observable_type,
     return {
         'type': 'verdict',
         'observable': {'type': observable_type, 'value': observable_value},
-        'disposition': disposition,
+        'disposition': disposition[0],
         'valid_time': valid_time
     }
 
@@ -95,8 +95,9 @@ def call_api(value):
 
 
 def get_disposition(res):
+    # Return tuple with (disposition, disposition_name)
     if res.startswith('Malicious'):
-        return current_app.config['DISPOSITIONS']['Malicious']
+        return current_app.config['DISPOSITIONS']['malicious']
 
 
 @enrich_api.route('/deliberate/observables', methods=['POST'])
@@ -121,8 +122,8 @@ def deliberate_observables():
 
         response = call_api(o_value)
 
-        disposition = get_disposition(response['message'])
-        if not disposition:
+        disposition_tuple = get_disposition(response['message'])
+        if not disposition_tuple:
             continue
 
         start_time = datetime.utcnow()
@@ -133,7 +134,7 @@ def deliberate_observables():
         }
 
         verdicts.append(
-            get_verdict(o_value, o_type, disposition, valid_time))
+            get_verdict(o_value, o_type, disposition_tuple, valid_time))
 
     if verdicts:
         data['verdicts'] = format_docs(verdicts)
@@ -164,8 +165,8 @@ def observe_observables():
 
         response = call_api(o_value)
 
-        disposition = get_disposition(response['message'])
-        if not disposition:
+        disposition_tuple = get_disposition(response['message'])
+        if not disposition_tuple:
             continue
 
         start_time = datetime.utcnow()
@@ -176,10 +177,10 @@ def observe_observables():
         }
 
         verdicts.append(
-            get_verdict(o_value, o_type, disposition, valid_time))
+            get_verdict(o_value, o_type, disposition_tuple, valid_time))
 
         judgements.append(
-            get_judgement(o_value, o_type, disposition, valid_time))
+            get_judgement(o_value, o_type, disposition_tuple, valid_time))
 
     if verdicts:
         data['verdicts'] = format_docs(verdicts)
