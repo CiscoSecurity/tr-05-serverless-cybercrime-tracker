@@ -13,10 +13,8 @@ def health():
     if response.ok:
         return jsonify_data({'status': 'ok'})
 
-    error = response.json()['error']
-
     error = {
         'code': 'invalid_health_check',
-        'message': f'Invalid 3rd party API connect. {error}.',
+        'message': f'Invalid 3rd party API connect.',
     }
     return jsonify_errors(error)
