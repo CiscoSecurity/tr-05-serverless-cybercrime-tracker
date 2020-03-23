@@ -21,7 +21,6 @@ class Config:
         'unknown': (5, 'Unknown')
     }
 
-
     # Supported types with rules
     CCT_OBSERVABLE_TYPES = {
         'url': {'sep': '://'},
