@@ -24,8 +24,7 @@ def test_positive_verdict(module_headers, observable, observable_type):
     Importance: Critical
     """
     observables = [{'type': observable_type, 'value': observable}]
-    '45.135.164.135'
-    'greatsteal.kl.com.ua/dashboard/admin.php'
+
     response = enrich_observe_observables(
         payload=observables,
         **{'headers': module_headers}
