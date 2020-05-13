@@ -26,3 +26,8 @@ class Config:
         'url': {'sep': '://'},
         'ip': {}
     }
+
+    CTR_HEADERS = {
+        'User-Agent': ('Cisco Threat Response Integrations '
+                       '<tr-integrations-support@cisco.com>')
+    }
