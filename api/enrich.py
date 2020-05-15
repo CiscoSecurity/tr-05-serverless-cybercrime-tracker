@@ -86,7 +86,8 @@ def format_docs(docs):
 def call_api(value):
     response = requests.get(
         f"{current_app.config['API_URL']}"
-        f"{current_app.config['API_PATH'].format(observable=value)}"
+        f"{current_app.config['API_PATH'].format(observable=value)}",
+        headers=current_app.config['CTR_HEADERS']
     )
     if not response.ok:
         return jsonify_errors(response.json()['error'])

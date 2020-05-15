@@ -47,7 +47,7 @@ As a TR Relay Module:
 **Note.** For convenience, each TR Relay CLI command may be prefixed with
 `env $(cat .env | xargs)` to automatically read the required environment
 variables from a `.env` file (i.e.`TR_API_CLIENT_ID`, `TR_API_CLIENT_PASSWORD`,
-`URL`, `JWT`) and pass them to the corresponding command.
+`URL`) and pass them to the corresponding command.
 
 ## Usage
 
