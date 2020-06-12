@@ -25,12 +25,17 @@ def test_positive_verdict(module_headers, observable, observable_type):
     """
     observables = [{'type': observable_type, 'value': observable}]
 
-    response = enrich_observe_observables(
+    response_from_all_modules = enrich_observe_observables(
         payload=observables,
         **{'headers': module_headers}
     )['data']
-    verdicts = get_observables(
-        response, 'Cybercrime-Tracker')['data']['verdicts']
+    response_from_cybercrime_module = get_observables(
+        response_from_all_modules, 'Cybercrime-Tracker')
+    assert response_from_cybercrime_module['module'] == 'Cybercrime-Tracker'
+    assert response_from_cybercrime_module['module_instance_id']
+    assert response_from_cybercrime_module['module_type_id']
+
+    verdicts = response_from_cybercrime_module['data']['verdicts']
     assert verdicts['count'] == 1
 
     for verdict in verdicts['docs']:

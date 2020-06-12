@@ -16,6 +16,6 @@ def health():
 
     error = {
         'code': 'invalid_health_check',
-        'message': f'Invalid 3rd party API connect.',
+        'message': 'Invalid 3rd party API connect.',
     }
     return jsonify_errors(error)
