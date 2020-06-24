@@ -13,6 +13,9 @@ __pycache__/
 build/
 dist/
 
+# Python
+venv/
+
 # Properties file
 project.properties
 
