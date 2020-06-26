@@ -10,7 +10,7 @@ from ctrlibrary.threatresponse.enrich import enrich_observe_observables
      ('greatsteal.kl.com.ua/dashboard/admin.php', 'url')))
 def test_positive_verdict(module_headers, observable, observable_type):
     """Perform testing for enrich observe observables endpoint to get
-    verdicts for observable from Cybercrime-Tracker
+    verdicts for observable from CyberCrime Tracker
 
     ID: CCTRI-813-700a7520-6454-485c-8daf-f876c6e57602
 
@@ -19,7 +19,7 @@ def test_positive_verdict(module_headers, observable, observable_type):
 
     Expectedresults:
         1. Check that data in response body contains expected verdicts for
-            observable from Cybercrime-Tracker
+            observable from CyberCrime Tracker
 
     Importance: Critical
     """
@@ -30,8 +30,8 @@ def test_positive_verdict(module_headers, observable, observable_type):
         **{'headers': module_headers}
     )['data']
     response_from_cybercrime_module = get_observables(
-        response_from_all_modules, 'Cybercrime-Tracker')
-    assert response_from_cybercrime_module['module'] == 'Cybercrime-Tracker'
+        response_from_all_modules, 'CyberCrime Tracker')
+    assert response_from_cybercrime_module['module'] == 'CyberCrime Tracker'
     assert response_from_cybercrime_module['module_instance_id']
     assert response_from_cybercrime_module['module_type_id']
 
@@ -48,7 +48,7 @@ def test_positive_verdict(module_headers, observable, observable_type):
 
 def test_positive_verdict_for_unknown_observable(module_headers):
     """Perform testing for enrich observe observables endpoint to get
-    verdicts for unknown observable from Cybercrime-Tracker
+    verdicts for unknown observable from CyberCrime Tracker
 
     ID: CCTRI-813-2d309620-e9ee-4fce-874a-f9a5fd810f50
 
@@ -57,7 +57,7 @@ def test_positive_verdict_for_unknown_observable(module_headers):
 
     Expectedresults:
         1. Check that data in response body is empty for observable from
-            Cybercrime-Tracker
+            CyberCrime Tracker
 
     Importance: Critical
     """
@@ -68,5 +68,5 @@ def test_positive_verdict_for_unknown_observable(module_headers):
         **{'headers': module_headers}
     )['data']
     verdicts = get_observables(
-        response, 'Cybercrime-Tracker')['data']
+        response, 'CyberCrime Tracker')['data']
     assert verdicts == {}
