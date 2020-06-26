@@ -195,4 +195,4 @@ CyberCrime Tracker does not have any Environment Variables.
 
 ## CTIM Mapping Specifics
 
-The CyberCrime Tracker API has a simple mapping. It is based on only one value of `message`.
+The CyberCrime Tracker API has simple mapping. It is based on `message` value as `disposition_name`.
