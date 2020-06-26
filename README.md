@@ -166,8 +166,7 @@ just make sure to send requests to your Lambda's `URL`.
 ### Implemented Relay Endpoints
 
 - `POST /health`
-  - Authenticates to the underlying external service to check that the provided
-  credentials are valid and the service is available at the moment.
+  - Checks that the service is available at the moment.
 
 - `POST /deliberate/observables`
   - Accepts a list of observables and filters out unsupported ones.
