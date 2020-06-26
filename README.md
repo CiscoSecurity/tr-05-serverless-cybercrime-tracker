@@ -191,19 +191,8 @@ just make sure to send requests to your Lambda's `URL`.
 - `url`
 
 ### Supported Environment Variables
-
-- `CTR_ENTITIES_LIMIT`
-  - Restricts the maximum number of CTIM entities of each type returned in a
-  single response per each requested observable.
-  - Applies to the following CTIM entities:
-    - `Verdict`,
-    - `Judgement`.
-  - Must be a positive integer. Defaults to `100` (if unset or incorrect).
+CyberCrime Tracker does not have any Environment Variables.
 
 ## CTIM Mapping Specifics
 
-Each response from the CyberCrime Tracker API for the supported observables generates
-the following CTIM entities:
-
-- `Verdict` is based on 
-- `Judgement` is based on 
+The CyberCrime Tracker API has a simple mapping. It is based on only one value of `message`.
