@@ -1,0 +1,10 @@
+[
+  {
+    "type": "url",
+    "value": "https://google.com"
+  },
+  {
+    "type": "ip",
+    "value": "1.1.1.1"
+  }
+]
