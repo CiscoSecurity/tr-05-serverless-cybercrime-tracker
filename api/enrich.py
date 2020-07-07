@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import requests
 from datetime import datetime, timedelta
-from flask import Blueprint, current_app
+from flask import Blueprint, current_app, jsonify
 
 from api.schemas import ObservableSchema
 from api.utils import get_json, jsonify_data, jsonify_errors
@@ -101,6 +101,15 @@ def get_disposition(res):
         return current_app.config['DISPOSITIONS']['malicious']
 
 
+def key_error():
+    return {
+        'type': 'fatal',
+        'code': 'key error',
+        'message': 'The structure of the 3rd-party response '
+                   'has changed. The module is broken.'
+    }
+
+
 @enrich_api.route('/deliberate/observables', methods=['POST'])
 def deliberate_observables():
     observables, error = get_observables()
@@ -114,33 +123,41 @@ def deliberate_observables():
 
     data = {}
     verdicts = []
+    errors = []
 
     observables = build_input_api(observables)
 
-    for observable in observables:
-        o_value = observable['value']
-        o_type = observable['type'].lower()
+    try:
+        for observable in observables:
+            o_value = observable['value']
+            o_type = observable['type'].lower()
 
-        response = call_api(o_value)
+            response = call_api(o_value)
 
-        disposition_tuple = get_disposition(response['message'])
-        if not disposition_tuple:
-            continue
+            disposition_tuple = get_disposition(response['message'])
+            if not disposition_tuple:
+                continue
 
-        start_time = datetime.utcnow()
-        end_time = start_time + timedelta(weeks=1)
-        valid_time = {
-            'start_time': start_time.isoformat() + 'Z',
-            'end_time': end_time.isoformat() + 'Z',
-        }
+            start_time = datetime.utcnow()
+            end_time = start_time + timedelta(weeks=1)
+            valid_time = {
+                'start_time': start_time.isoformat() + 'Z',
+                'end_time': end_time.isoformat() + 'Z',
+            }
 
-        verdicts.append(
-            get_verdict(o_value, o_type, disposition_tuple, valid_time))
+            verdicts.append(
+                get_verdict(o_value, o_type, disposition_tuple, valid_time))
+    except KeyError:
+        errors.append(key_error())
 
     if verdicts:
         data['verdicts'] = format_docs(verdicts)
 
-    return jsonify_data(data)
+    result = {'data': data}
+    if errors:
+        result['errors'] = errors
+
+    return jsonify(result)
 
 
 @enrich_api.route('/observe/observables', methods=['POST'])
@@ -157,39 +174,46 @@ def observe_observables():
     data = {}
     verdicts = []
     judgements = []
+    errors = []
 
     observables = build_input_api(observables)
 
-    for observable in observables:
-        o_value = observable['value']
-        o_type = observable['type'].lower()
+    try:
+        for observable in observables:
+            o_value = observable['value']
+            o_type = observable['type'].lower()
 
-        response = call_api(o_value)
+            response = call_api(o_value)
 
-        disposition_tuple = get_disposition(response['message'])
-        if not disposition_tuple:
-            continue
+            disposition_tuple = get_disposition(response['message'])
+            if not disposition_tuple:
+                continue
 
-        start_time = datetime.utcnow()
-        end_time = start_time + timedelta(weeks=1)
-        valid_time = {
-            'start_time': start_time.isoformat() + 'Z',
-            'end_time': end_time.isoformat() + 'Z',
-        }
+            start_time = datetime.utcnow()
+            end_time = start_time + timedelta(weeks=1)
+            valid_time = {
+                'start_time': start_time.isoformat() + 'Z',
+                'end_time': end_time.isoformat() + 'Z',
+            }
 
-        verdicts.append(
-            get_verdict(o_value, o_type, disposition_tuple, valid_time))
+            verdicts.append(
+                get_verdict(o_value, o_type, disposition_tuple, valid_time))
 
-        judgements.append(
-            get_judgement(o_value, o_type, disposition_tuple, valid_time))
+            judgements.append(
+                get_judgement(o_value, o_type, disposition_tuple, valid_time))
+    except KeyError:
+        errors.append(key_error())
 
     if verdicts:
         data['verdicts'] = format_docs(verdicts)
-
     if judgements:
         data['judgements'] = format_docs(judgements)
 
-    return jsonify_data(data)
+    result = {'data': data}
+    if errors:
+        result['errors'] = errors
+
+    return jsonify(result)
 
 
 @enrich_api.route('/refer/observables', methods=['POST'])
