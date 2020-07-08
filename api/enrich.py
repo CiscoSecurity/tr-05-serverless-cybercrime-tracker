@@ -105,7 +105,7 @@ def key_error():
     return {
         'type': 'fatal',
         'code': 'key error',
-        'message': 'The structure of the 3rd-party response '
+        'message': 'The data structure of CyberCrime Tracker '
                    'has changed. The module is broken.'
     }
 
