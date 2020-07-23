@@ -1,7 +1,6 @@
 INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
 NOT_FOUND = 'not found'
-KEY_ERROR = 'key error'
 SERVER_UNAVAILABLE = 'service unavailable'
 
 
@@ -35,16 +34,6 @@ class CybercrimeUnexpectedError(TRError):
         super().__init__(
             code=UNKNOWN,
             message=error_payload
-        )
-
-
-class CybercrimeKeyError(TRError):
-    def __init__(self):
-
-        super().__init__(
-            code=KEY_ERROR,
-            message='The data structure of CyberCrime has changed.'
-                    ' The module is broken.'
         )
 
 
