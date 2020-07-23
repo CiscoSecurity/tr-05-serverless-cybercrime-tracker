@@ -1,5 +1,6 @@
 from functools import partial
 from uuid import uuid4
+from http import HTTPStatus
 
 import requests
 from datetime import datetime, timedelta
@@ -7,12 +8,21 @@ from flask import Blueprint, current_app, jsonify, g
 
 from api.schemas import ObservableSchema
 from api.utils import get_json, jsonify_data, jsonify_errors, format_docs
+from api.errors import CybercrimeUnexpectedError, CybercrimetNotFoundError, CybercrimeUnavailableError
 
 enrich_api = Blueprint('enrich', __name__)
 
 
 get_observables = partial(get_json, schema=ObservableSchema(many=True))
 
+
+EXPECTED_RESPONSE_ERRORS = {
+    HTTPStatus.NOT_FOUND: CybercrimetNotFoundError,
+    HTTPStatus.SERVICE_UNAVAILABLE: CybercrimeUnavailableError,
+    HTTPStatus.BAD_GATEWAY: CybercrimeUnavailableError,
+    HTTPStatus.INTERNAL_SERVER_ERROR: CybercrimeUnavailableError,
+    HTTPStatus.GATEWAY_TIMEOUT: CybercrimeUnavailableError
+}
 
 def get_judgement(observable_value, observable_type,
                   disposition, valid_time):
@@ -85,10 +95,12 @@ def call_api(value):
         f"{current_app.config['API_PATH'].format(observable=value)}",
         headers=current_app.config['CTR_HEADERS']
     )
-    if not response.ok:
-        return jsonify_errors(response.json()['error'])
-
-    return response.json()
+    if response.status_code in EXPECTED_RESPONSE_ERRORS:
+        raise EXPECTED_RESPONSE_ERRORS[response.status_code]
+    else:
+        if not response.ok:
+            raise CybercrimeUnexpectedError(response.json()['error'])
+        return response.json()
 
 
 def get_disposition(res):

@@ -3,6 +3,8 @@ from flask import Flask, jsonify
 from api.enrich import enrich_api
 from api.health import health_api
 from api.respond import respond_api
+from api.utils import jsonify_errors
+from api.errors import TRError
 
 app = Flask(__name__)
 
@@ -25,6 +27,11 @@ def handle_error(exception):
 
     response = jsonify(code=code, message=message, reason=reason)
     return response, code
+
+
+@app.errorhandler(TRError)
+def handle_tr_error(exception):
+    return jsonify_errors(exception.json)
 
 
 if __name__ == '__main__':
