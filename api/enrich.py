@@ -8,7 +8,11 @@ from flask import Blueprint, current_app, jsonify, g
 
 from api.schemas import ObservableSchema
 from api.utils import get_json, jsonify_data, jsonify_errors, format_docs
-from api.errors import CybercrimeUnexpectedError, CybercrimetNotFoundError, CybercrimeUnavailableError
+from api.errors import (
+    CybercrimeUnexpectedError,
+    CybercrimetNotFoundError,
+    CybercrimeUnavailableError
+)
 
 enrich_api = Blueprint('enrich', __name__)
 
@@ -23,6 +27,7 @@ EXPECTED_RESPONSE_ERRORS = {
     HTTPStatus.INTERNAL_SERVER_ERROR: CybercrimeUnavailableError,
     HTTPStatus.GATEWAY_TIMEOUT: CybercrimeUnavailableError
 }
+
 
 def get_judgement(observable_value, observable_type,
                   disposition, valid_time):
