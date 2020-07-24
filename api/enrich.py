@@ -1,17 +1,32 @@
 from functools import partial
 from uuid import uuid4
+from http import HTTPStatus
 
 import requests
 from datetime import datetime, timedelta
-from flask import Blueprint, current_app, jsonify
+from flask import Blueprint, current_app, jsonify, g
 
 from api.schemas import ObservableSchema
-from api.utils import get_json, jsonify_data, jsonify_errors
+from api.utils import get_json, jsonify_data, jsonify_errors, format_docs
+from api.errors import (
+    CybercrimeUnexpectedError,
+    CybercrimetNotFoundError,
+    CybercrimeUnavailableError
+)
 
 enrich_api = Blueprint('enrich', __name__)
 
 
 get_observables = partial(get_json, schema=ObservableSchema(many=True))
+
+
+EXPECTED_RESPONSE_ERRORS = {
+    HTTPStatus.NOT_FOUND: CybercrimetNotFoundError,
+    HTTPStatus.SERVICE_UNAVAILABLE: CybercrimeUnavailableError,
+    HTTPStatus.BAD_GATEWAY: CybercrimeUnavailableError,
+    HTTPStatus.INTERNAL_SERVER_ERROR: CybercrimeUnavailableError,
+    HTTPStatus.GATEWAY_TIMEOUT: CybercrimeUnavailableError
+}
 
 
 def get_judgement(observable_value, observable_type,
@@ -79,20 +94,18 @@ def build_input_api(observables):
     return observables
 
 
-def format_docs(docs):
-    return {'count': len(docs), 'docs': docs}
-
-
 def call_api(value):
     response = requests.get(
         f"{current_app.config['API_URL']}"
         f"{current_app.config['API_PATH'].format(observable=value)}",
         headers=current_app.config['CTR_HEADERS']
     )
-    if not response.ok:
-        return jsonify_errors(response.json()['error'])
-
-    return response.json()
+    if response.status_code in EXPECTED_RESPONSE_ERRORS:
+        raise EXPECTED_RESPONSE_ERRORS[response.status_code]
+    else:
+        if not response.ok:
+            raise CybercrimeUnexpectedError(response.json()['error'])
+        return response.json()
 
 
 def get_disposition(res):
@@ -122,8 +135,8 @@ def deliberate_observables():
         return jsonify_data({})
 
     data = {}
-    verdicts = []
-    errors = []
+    g.verdicts = []
+    g.errors = []
 
     observables = build_input_api(observables)
 
@@ -145,17 +158,17 @@ def deliberate_observables():
                 'end_time': end_time.isoformat() + 'Z',
             }
 
-            verdicts.append(
+            g.verdicts.append(
                 get_verdict(o_value, o_type, disposition_tuple, valid_time))
     except KeyError:
-        errors.append(key_error())
+        g.errors.append(key_error())
 
-    if verdicts:
-        data['verdicts'] = format_docs(verdicts)
+    if g.verdicts:
+        data['verdicts'] = format_docs(g.verdicts)
 
     result = {'data': data}
-    if errors:
-        result['errors'] = errors
+    if g.errors:
+        result['errors'] = g.errors
 
     return jsonify(result)
 
@@ -172,9 +185,9 @@ def observe_observables():
         return jsonify_data({})
 
     data = {}
-    verdicts = []
-    judgements = []
-    errors = []
+    g.verdicts = []
+    g.judgements = []
+    g.errors = []
 
     observables = build_input_api(observables)
 
@@ -196,22 +209,22 @@ def observe_observables():
                 'end_time': end_time.isoformat() + 'Z',
             }
 
-            verdicts.append(
+            g.verdicts.append(
                 get_verdict(o_value, o_type, disposition_tuple, valid_time))
 
-            judgements.append(
+            g.judgements.append(
                 get_judgement(o_value, o_type, disposition_tuple, valid_time))
     except KeyError:
-        errors.append(key_error())
+        g.errors.append(key_error())
 
-    if verdicts:
-        data['verdicts'] = format_docs(verdicts)
-    if judgements:
-        data['judgements'] = format_docs(judgements)
+    if g.verdicts:
+        data['verdicts'] = format_docs(g.verdicts)
+    if g.judgements:
+        data['judgements'] = format_docs(g.judgements)
 
     result = {'data': data}
-    if errors:
-        result['errors'] = errors
+    if g.errors:
+        result['errors'] = g.errors
 
     return jsonify(result)
 
