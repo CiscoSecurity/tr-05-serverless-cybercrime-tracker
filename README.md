@@ -130,9 +130,9 @@ old `URL` forever.
 
 Now, the only thing left to do is to follow one of these URLs to navigate 
 to Threat Response in your region and create the CyberCrime Tracker module using your Lambda's URL:
-- US: https://visibility.amp.cisco.com/settings/modules/available/e16a5446-d4ea-44df-8dca-58fd9c7f476f/new
-- EU: https://visibility.eu.amp.cisco.com/settings/modules/available/5be9df3f-40b7-47af-bd16-6b480fc916ba/new
-- APJC: https://visibility.apjc.amp.cisco.com/settings/modules/available/8758d0bf-3c22-4ca3-bc2b-c55fbfeeca44/new
+- US: https://securex.us.security.cisco.com/settings/modules/available/e16a5446-d4ea-44df-8dca-58fd9c7f476f/new
+- EU: https://securex.eu.security.cisco.com/settings/modules/available/5be9df3f-40b7-47af-bd16-6b480fc916ba/new
+- APJC: https://securex.apjc.security.cisco.com/settings/modules/available/8758d0bf-3c22-4ca3-bc2b-c55fbfeeca44/new
 
 That is it! Your Serverless Relay is ready to use! Congratulations!
 

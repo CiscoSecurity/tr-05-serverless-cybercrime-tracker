@@ -1,5 +1,5 @@
 Authlib==0.14.3
 Flask==1.1.2
-marshmallow==3.6.1
+marshmallow==3.7.1
 requests==2.24.0
 zappa==0.51.0
