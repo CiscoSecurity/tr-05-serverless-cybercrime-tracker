@@ -42,7 +42,7 @@ EXPECTED_OBSERVE_RESPONSE = {
                     'priority': 90,
                     'schema_version': '1.0.16',
                     'severity': 'Medium',
-                    'source': 'Cybercrime Tracker',
+                    'source': 'CyberCrime Tracker',
                     'source_uri': 'http://cybercrime-tracker.net/'
                                   'index.php?search=104.24.123.62',
                     'type': 'judgement'

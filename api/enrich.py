@@ -37,13 +37,13 @@ def get_judgement(observable_value, observable_type,
         observable=observable_value)
 
     return {
-        'id': f'transient:{uuid4()}',
+        'id': f'transient:judgement-{uuid4()}',
         'observable': {'value': observable_value, 'type': observable_type},
         'disposition': disposition[0],
         'disposition_name': disposition[1],
         'type': 'judgement',
         'schema_version': '1.0.16',
-        'source': 'Cybercrime Tracker',
+        'source': 'CyberCrime Tracker',
         'confidence': 'Low',
         'priority': 90,
         'severity': 'Medium',
