@@ -2,6 +2,7 @@ from http import HTTPStatus
 from pytest import fixture
 from unittest import mock
 
+
 def routes():
     yield '/health'
 
@@ -30,4 +31,4 @@ def test_health_call_error(response_mock, client):
     response = client.post('/health')
 
     assert response.status_code == HTTPStatus.OK
-    assert response.json == exp_response
+    assert response.get_json() == exp_response
