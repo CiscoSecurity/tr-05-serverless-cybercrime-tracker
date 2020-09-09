@@ -1,7 +1,7 @@
 import pytest
-
 from ctrlibrary.core.utils import get_observables
 from ctrlibrary.threatresponse.enrich import enrich_observe_observables
+from tests.functional.tests.constants import MODULE_NAME
 
 
 @pytest.mark.parametrize(
@@ -24,14 +24,14 @@ def test_positive_verdict(module_headers, observable, observable_type):
     Importance: Critical
     """
     observables = [{'type': observable_type, 'value': observable}]
-
     response_from_all_modules = enrich_observe_observables(
         payload=observables,
         **{'headers': module_headers}
     )['data']
     response_from_cybercrime_module = get_observables(
-        response_from_all_modules, 'CyberCrime Tracker')
-    assert response_from_cybercrime_module['module'] == 'CyberCrime Tracker'
+        response_from_all_modules, MODULE_NAME)
+
+    assert response_from_cybercrime_module['module'] == MODULE_NAME
     assert response_from_cybercrime_module['module_instance_id']
     assert response_from_cybercrime_module['module_type_id']
 
@@ -42,8 +42,8 @@ def test_positive_verdict(module_headers, observable, observable_type):
         assert verdict['type'] == 'verdict'
         assert verdict['disposition'] == 2
         assert verdict['observable'] == observables[0]
-        assert 'start_time' in verdict['valid_time']
-        assert 'end_time' in verdict['valid_time']
+        assert verdict['valid_time']['start_time']
+        assert verdict['valid_time']['end_time']
 
 
 def test_positive_verdict_for_unknown_observable(module_headers):
@@ -61,12 +61,12 @@ def test_positive_verdict_for_unknown_observable(module_headers):
 
     Importance: Critical
     """
-    observables = [{'type': 'ip', 'value': '123.223.23.13'}]
+    observable = [{'type': 'ip', 'value': '123.223.23.13'}]
 
-    response = enrich_observe_observables(
-        payload=observables,
+    response_from_all_modules = enrich_observe_observables(
+        payload=observable,
         **{'headers': module_headers}
     )['data']
     verdicts = get_observables(
-        response, 'CyberCrime Tracker')['data']
+        response_from_all_modules, MODULE_NAME)['data']
     assert verdicts == {}
