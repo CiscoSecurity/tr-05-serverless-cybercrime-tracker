@@ -11,7 +11,8 @@ from api.utils import get_json, jsonify_data, jsonify_errors, format_docs
 from api.errors import (
     CybercrimeUnexpectedError,
     CybercrimetNotFoundError,
-    CybercrimeUnavailableError
+    CybercrimeUnavailableError,
+    CybercrimeSSLError
 )
 
 enrich_api = Blueprint('enrich', __name__)
@@ -95,11 +96,14 @@ def build_input_api(observables):
 
 
 def call_api(value):
-    response = requests.get(
-        f"{current_app.config['API_URL']}"
-        f"{current_app.config['API_PATH'].format(observable=value)}",
-        headers=current_app.config['CTR_HEADERS']
-    )
+    try:
+        response = requests.get(
+            f"{current_app.config['API_URL']}"
+            f"{current_app.config['API_PATH'].format(observable=value)}",
+            headers=current_app.config['CTR_HEADERS']
+        )
+    except requests.exceptions.SSLError as ex:
+        raise CybercrimeSSLError(ex)
     if response.status_code in EXPECTED_RESPONSE_ERRORS:
         raise EXPECTED_RESPONSE_ERRORS[response.status_code]
     else:
