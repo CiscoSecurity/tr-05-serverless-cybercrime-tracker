@@ -85,3 +85,14 @@ EXPECTED_RESPONSE_404_ERROR = {
         }
     ]
 }
+
+EXPECTED_RESPONSE_SSL_ERROR = {
+    'errors': [
+        {
+            'code': 'unknown',
+            'message': 'Unable to verify SSL certificate: Self signed '
+                       'certificate',
+            'type': 'fatal'
+        }
+    ]
+}
