@@ -18,7 +18,7 @@ def test_positive_smoke_empty_observable(module_headers, observable,
     ID: CCTRI-1707-07e734d0-1dcc-4f6a-b169-b8f1b4f53d3d
 
     Steps:
-        1. Send request to enrich deliberate observable endpoint
+        1. Send request to enrich observe observables endpoint
 
     Expectedresults:
         1. Response body contains empty data dict from CyberCrime Tracker
