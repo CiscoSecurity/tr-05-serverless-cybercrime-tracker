@@ -20,7 +20,8 @@ def test_positive_smoke_enrich_health(module_headers):
     """
     response_from_all_modules = enrich_post_health(
         **{'headers': module_headers}
-    )['data']
+    )
+
     response_from_cybercrime = get_observables(response_from_all_modules,
                                                MODULE_NAME)
 
