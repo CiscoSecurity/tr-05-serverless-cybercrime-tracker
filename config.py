@@ -1,6 +1,6 @@
 import os
 
-from version import VERSION
+from __version__ import VERSION
 
 
 class Config:
