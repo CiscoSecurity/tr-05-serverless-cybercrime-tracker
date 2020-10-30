@@ -32,10 +32,8 @@ def test_positive_smoke_empty_observables(
         **{'headers': module_headers}
     )
 
-    cyber_crime_data = response_from_all_modules['data']
-
     response_from_cybercrime_module = get_observables(
-        cyber_crime_data, MODULE_NAME)
+        response_from_all_modules, MODULE_NAME)
 
     assert response_from_cybercrime_module['module'] == MODULE_NAME
     assert response_from_cybercrime_module['module_instance_id']
