@@ -186,6 +186,9 @@ just make sure to send requests to your Lambda's `URL`.
     - `Verdict`,
     - `Judgement`.
 
+- `POST /version`
+  - Returns the current version of the application.
+
 ### Supported Types of Observables
 
 - `ip`
