@@ -13,8 +13,6 @@ def secret_key():
 
 @fixture(scope='session')
 def client(secret_key):
-    app.secret_key = secret_key
-
     app.testing = True
 
     with app.test_client() as client:
