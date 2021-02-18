@@ -96,3 +96,13 @@ EXPECTED_RESPONSE_SSL_ERROR = {
         }
     ]
 }
+
+EXPECTED_WATCHDOG_ERROR = {
+    'errors': [
+        {
+            'code': 'health check failed',
+            'message': 'Invalid Health Check',
+            'type': 'fatal'
+        }
+    ]
+}

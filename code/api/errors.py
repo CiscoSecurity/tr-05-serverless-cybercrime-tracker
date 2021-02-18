@@ -2,6 +2,7 @@ INVALID_ARGUMENT = 'invalid argument'
 UNKNOWN = 'unknown'
 NOT_FOUND = 'not found'
 SERVER_UNAVAILABLE = 'service unavailable'
+HEALTH_CHECK_ERROR = 'health check failed'
 
 
 class TRError(Exception):
@@ -61,4 +62,12 @@ class CybercrimeSSLError(TRError):
         super().__init__(
             UNKNOWN,
             f'Unable to verify SSL certificate: {message}'
+        )
+
+
+class CybercrimeWatchdogError(TRError):
+    def __init__(self):
+        super().__init__(
+            HEALTH_CHECK_ERROR,
+            'Invalid Health Check'
         )
