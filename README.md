@@ -5,10 +5,6 @@ A Cisco SecureX Concrete Relay implementation using
 [CyberCrime Tracker](http://cybercrime-tracker.net)
 as a third-party Cyber Threat Intelligence service provider.
 
-The Relay itself is just a simple application written in Python that can be
-easily packaged and deployed as an AWS Lambda Function using
-[Zappa](https://github.com/Miserlou/Zappa).
-
 The Relay itself is just a simple application written in Python that can be easily packaged and deployed.  This relay is now Cisco Hosted and no longer requires AWS Lambda.
 
 The code is provided here purely for educational purposes.
