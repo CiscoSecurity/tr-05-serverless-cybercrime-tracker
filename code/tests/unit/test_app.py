@@ -20,6 +20,7 @@ def calls():
     yield Call('GET', '/refer/observables', HTTPStatus.METHOD_NOT_ALLOWED)
     yield Call('GET', '/respond/observables', HTTPStatus.METHOD_NOT_ALLOWED)
     yield Call('GET', '/respond/trigger', HTTPStatus.METHOD_NOT_ALLOWED)
+    yield Call('POST', '/watchdog', HTTPStatus.METHOD_NOT_ALLOWED)
 
 
 @fixture(scope='module',
