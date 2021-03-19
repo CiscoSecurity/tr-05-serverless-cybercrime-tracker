@@ -1,4 +1,8 @@
 [![Gitter Chat](https://img.shields.io/badge/gitter-join%20chat-brightgreen.svg)](https://gitter.im/CiscoSecurity/Threat-Response "Gitter Chat")
+
+# NOTE! This code has been upgraded and the current release no longer supports installation in AWS
+If you wish to deploy in AWS, use [this](https://github.com/CiscoSecurity/tr-05-serverless-cybercrime-tracker/releases/tag/AWS) previous release.
+
 # CyberCrime Tracker Relay (Cisco Hosted)
 
 A Cisco SecureX Concrete Relay implementation using 
