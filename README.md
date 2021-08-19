@@ -20,22 +20,26 @@ The code is provided here purely for educational purposes.
 
 ## Testing (Optional)
 
-If you want to test the application you will require Docker and several dependencies from the [requirements.txt](code/requirements.txt) file:
+Open the code folder in your terminal.
 ```
-pip install --upgrade --requirement code/requirements.txt
+cd code
+```
+
+If you want to test the application you will require Docker and several dependencies from the [Pipfile](code/Pipfile) file:
+```
+pip install --no-cache-dir --upgrade pipenv && pipenv install --dev
 ```
 
 You can perform two kinds of testing:
 
 - Run static code analysis checking for any semantic discrepancies and [PEP 8](https://www.python.org/dev/peps/pep-0008/) compliance:
 
-  `flake8 code`
+  `flake8 .`
 
 - Run the suite of unit tests and measure the code coverage:
-  ```
-  cd code
+```
   coverage run --source api/ -m pytest --verbose tests/unit/ && coverage report
-  ```
+```
 
 **NOTE.** If you need input data for testing purposes you can use data from the
 [observables.json](code/observables.json) file.
