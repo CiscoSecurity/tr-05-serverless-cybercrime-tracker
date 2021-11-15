@@ -231,9 +231,3 @@ def observe_observables():
         result['errors'] = g.errors
 
     return jsonify(result)
-
-
-@enrich_api.route('/refer/observables', methods=['POST'])
-def refer_observables():
-    # Not supported or implemented
-    return jsonify_data([])
