@@ -47,7 +47,9 @@ def test_health_call_success(route, client, cybercrime_api_request):
 
 
 def test_health_call_error(route, client, cybercrime_api_request):
-    cybercrime_api_request.return_value = cybercrime_api_response(ok=False)
+    cybercrime_api_request.return_value = cybercrime_api_response(
+        ok=False,
+        payload={'error': 'Cybercrime error message'})
 
     response = client.post(route)
 

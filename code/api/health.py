@@ -1,8 +1,9 @@
 import requests
 from flask import Blueprint, current_app
 
-from api.utils import jsonify_errors, jsonify_data
-from api.errors import CybercrimeSSLError
+from api.enrich import EXPECTED_RESPONSE_ERRORS
+from api.utils import jsonify_data
+from api.errors import CybercrimeSSLError, CybercrimeUnexpectedError
 
 health_api = Blueprint('health', __name__)
 
@@ -17,9 +18,7 @@ def health():
 
     if response.ok:
         return jsonify_data({'status': 'ok'})
-
-    error = {
-        'code': 'invalid_health_check',
-        'message': 'Invalid 3rd party API connect.',
-    }
-    return jsonify_errors(error)
+    elif response.status_code in EXPECTED_RESPONSE_ERRORS:
+        raise EXPECTED_RESPONSE_ERRORS[response.status_code]
+    else:
+        raise CybercrimeUnexpectedError(response.json())
